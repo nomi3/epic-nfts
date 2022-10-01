@@ -8,10 +8,6 @@ const main = async () => {
   let txn = await nftContract.makeAnEpicNFT();
   // Minting が仮想マイナーにより、承認されるのを待つ。
   await txn.wait();
-  // makeAnEpicNFT 関数をもう一度呼び出す。NFT がまた Mint される。
-  txn = await nftContract.makeAnEpicNFT();
-  // Minting が仮想マイナーにより、承認されるのを待つ。
-  await txn.wait();
 };
 const runMain = async () => {
   try {
