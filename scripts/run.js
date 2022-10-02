@@ -5,7 +5,9 @@ const main = async () => {
   await nftContract.deployed();
   console.log("Contract deployed to:", nftContract.address);
   // makeAnEpicNFT 関数を呼び出す。NFT が Mint される。
-  let txn = await nftContract.makeAnEpicNFT();
+  let txn = await nftContract.makeAnEpicNFT({
+    value: hre.ethers.utils.parseEther("0.01"),
+  });
   // Minting が仮想マイナーにより、承認されるのを待つ。
   await txn.wait();
 };
