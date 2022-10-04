@@ -20,6 +20,7 @@ contract MyEpicNFT is ERC721URIStorage {
 
   string[] firstWords = ["YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD"];
 
+  event NewEpicNFTMinted(address sender, uint256 tokenId);
 
   // pickRandomFirstWord関数は、最初の単語を選びます。
   function pickRandomFirstWord(uint256 tokenId) public view returns (string memory) {
@@ -96,5 +97,7 @@ contract MyEpicNFT is ERC721URIStorage {
 
     // 次の NFT が Mint されるときのカウンターをインクリメントする。
     _tokenIds.increment();
+
+    emit NewEpicNFTMinted(msg.sender, newItemId);
   }
 }
