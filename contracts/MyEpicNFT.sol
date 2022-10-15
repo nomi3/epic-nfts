@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "hardhat/console.sol";
 
 import { Base64 } from "./libraries/Base64.sol";
@@ -12,12 +13,14 @@ contract MyEpicNFT is ERC721URIStorage {
 
   struct DotAttributes {
     string name;
-    string dotSvg;
-    string artistName;
+    string color;
+    uint x;
+    uint y;
   }
 
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
+
   uint public constant PRICE = 0.01 ether;
 
   mapping(uint256 => DotAttributes) public nftHolderAttributes;
@@ -44,19 +47,21 @@ contract MyEpicNFT is ERC721URIStorage {
     console.log("This is my RandomDotNFT contract.");
   }
 
-  function makeAnEpicNFT(string memory artist)public payable {
-  // function makeAnEpicNFT(string memory artist)public payable {
+  function makeAnEpicNFT(
+    string memory artist,
+    string memory color,
+    uint x,
+    uint y
+  ) public payable {
 
     uint256 newItemId = _tokenIds.current();
     // require(msg.value >= PRICE, "Not enough ether to purchase NFTs.");
 
-    string memory pixcelSvg = '<path fill="#000080" d="M140 100h20v20h-20z"/>';
-
-
     nftHolderAttributes[newItemId] = DotAttributes({
-      name: "Growing Random Dot",
-      dotSvg: pixcelSvg,
-      artistName: artist
+      name: artist,
+      color: color,
+      x: x,
+      y: y
     });
 
     _safeMint(msg.sender, newItemId);
@@ -68,29 +73,43 @@ contract MyEpicNFT is ERC721URIStorage {
     emit NewEpicNFTMinted(msg.sender, newItemId);
   }
 
-  function updateNFT() public {
-    uint256 nftTokenIdOfPlayer = nftHolders[msg.sender];
-    DotAttributes storage dot = nftHolderAttributes[nftTokenIdOfPlayer];
+  // function updateNFT() public {
+  //   uint256 nftTokenIdOfPlayer = nftHolders[msg.sender];
+  //   DotAttributes storage dot = nftHolderAttributes[nftTokenIdOfPlayer];
 
-    dot.dotSvg = string(
-      abi.encodePacked(
-        dot.dotSvg,
-        '<path fill="#ff1493" d="M120 100h20v20h-20z"/>'
-      )
-    );
-  }
+  //   dot.dotSvg = string(
+  //     abi.encodePacked(
+  //       dot.dotSvg,
+  //       '<path fill="#ff1493" d="M120 100h20v20h-20z"/>'
+  //     )
+  //   );
+  // }
 
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-    DotAttributes memory dotAttributes = nftHolderAttributes[_tokenId];
+    DotAttributes memory myDotAttributes = nftHolderAttributes[_tokenId];
+    string memory dotSvg;
 
-    string memory strName = dotAttributes.name;
-    string memory strPixcelSvg = dotAttributes.dotSvg;
-    string memory strArtistName = dotAttributes.artistName;
+    for(uint i = 0; i < _tokenIds.current(); i++) {
+      DotAttributes memory dotAttributes = nftHolderAttributes[i];
+      dotSvg = string(
+        abi.encodePacked(
+          dotSvg,
+          '<path fill="#',
+          dotAttributes.color,
+          '" d="M',
+          Strings.toString(dotAttributes.x),
+          ' ',
+          Strings.toString(dotAttributes.y),
+          'h20v20h-20z"/>'
+        )
+      );
+      console.log(dotSvg);
+    }
 
     string memory baseSvg = string(
       abi.encodePacked(
         '<svg baseProfile="full" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg"><style type="text/css">.st1{transform-origin:center;animation:w_mill 30s linear infinite;}@keyframes w_mill {to {transform:rotate(1turn);}}</style><g class="st1">',
-        strPixcelSvg,
+        dotSvg,
         '</g></svg>'
       )
     );
@@ -99,15 +118,15 @@ contract MyEpicNFT is ERC721URIStorage {
       bytes(
         string(
           abi.encodePacked(
-            '{"name": "',
-            strName,
+            '{"name": "Growing Random Dot #',
+            Strings.toString(_tokenId),
             '", "description": "We love random dot.", "image": "data:image/svg+xml;base64,',
             Base64.encode(bytes(baseSvg)),
             '",',
             '"attributes":[{"trait_type":"Artist","value":"',
-            strArtistName,
+            myDotAttributes.name,
             '"},{"display_type":"date","trait_type":"',
-            strArtistName,
+            myDotAttributes.name,
             '","value":1664635807},{"display_type":"date","trait_type":"Artist2","value":1664645807}]}'
           )
         )
