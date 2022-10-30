@@ -9,9 +9,8 @@ const main = async () => {
   // });
 
   let d = new Date()
-  console.log(d.getTime())
 
-  txn = await nftContract.makeAnEpicNFT(`${d.getTime()} Artist`, "6a5acd", 500, 180);
+  txn = await nftContract.makeAnEpicNFT(`${d.getTime()} Artist`, "778899", 400, 180);
   await txn.wait();
   console.log("Minted NFT");
 
