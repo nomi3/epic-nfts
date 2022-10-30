@@ -8,8 +8,10 @@ const main = async () => {
   //   value: hre.ethers.utils.parseEther("0.01"),
   // });
 
+  let d = new Date()
+  console.log(d.getTime())
 
-  txn = await nftContract.makeAnEpicNFT("Updated2 Artist", "f21080", 240, 180);
+  txn = await nftContract.makeAnEpicNFT(`${d.getTime()} Artist`, "6a5acd", 500, 180);
   await txn.wait();
   console.log("Minted NFT");
 
