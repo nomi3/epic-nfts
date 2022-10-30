@@ -12,6 +12,9 @@ const main = async () => {
   txn = await nftContract.makeAnEpicNFT("Super Artist", "ff6347", 80, 80);
   await txn.wait();
 
+  txn = await nftContract.makeAnEpicNFT("Second Artist", "008080", 580, 580);
+  await txn.wait();
+
   // txn = await nftContract.updateNFT();
   // await txn.wait();
   // console.log("UPDATE NFT.");

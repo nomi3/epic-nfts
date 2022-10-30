@@ -14,6 +14,7 @@ contract MyEpicNFT is ERC721URIStorage {
   struct DotAttributes {
     string name;
     string color;
+    uint time;
     uint x;
     uint y;
   }
@@ -26,22 +27,7 @@ contract MyEpicNFT is ERC721URIStorage {
   mapping(uint256 => DotAttributes) public nftHolderAttributes;
   mapping(address => uint256) public nftHolders;
 
-  // string[] firstWords = ["YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD", "YOUR_WORD"];
-
   event NewEpicNFTMinted(address sender, uint256 tokenId);
-
-  // function pickRandomFirstWord(uint256 tokenId) public view returns (string memory) {
-
-  //   uint256 rand = random(string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId))));
-	//   console.log("rand - seed: ", rand);
-  //   rand = rand % firstWords.length;
-	//   console.log("rand - first word: ", rand);
-  //   return firstWords[rand];
-  // }
-
-  // function random(string memory input) internal pure returns (uint256) {
-  //   return uint256(keccak256(abi.encodePacked(input)));
-  // }
 
   constructor() ERC721 ("RandomDotNFT", "RDN") {
     console.log("This is my RandomDotNFT contract.");
@@ -60,6 +46,7 @@ contract MyEpicNFT is ERC721URIStorage {
     nftHolderAttributes[newItemId] = DotAttributes({
       name: artist,
       color: color,
+      time: block.timestamp,
       x: x,
       y: y
     });
@@ -88,6 +75,7 @@ contract MyEpicNFT is ERC721URIStorage {
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
     DotAttributes memory myDotAttributes = nftHolderAttributes[_tokenId];
     string memory dotSvg;
+    string memory history;
 
     for(uint i = 0; i < _tokenIds.current(); i++) {
       DotAttributes memory dotAttributes = nftHolderAttributes[i];
@@ -104,6 +92,18 @@ contract MyEpicNFT is ERC721URIStorage {
         )
       );
       console.log(dotSvg);
+
+      history = string(
+        abi.encodePacked(
+          history,
+          ',{"display_type":"date","trait_type":"',
+          dotAttributes.name,
+          '","value":',
+          Strings.toString(dotAttributes.time),
+          '}'
+        )
+      );
+      console.log(history);
     }
 
     string memory baseSvg = string(
@@ -125,9 +125,9 @@ contract MyEpicNFT is ERC721URIStorage {
             '",',
             '"attributes":[{"trait_type":"Artist","value":"',
             myDotAttributes.name,
-            '"},{"display_type":"date","trait_type":"',
-            myDotAttributes.name,
-            '","value":1664635807},{"display_type":"date","trait_type":"Artist2","value":1664645807}]}'
+            '"}',
+            history,
+            ']}'
           )
         )
       )
