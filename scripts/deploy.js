@@ -17,13 +17,13 @@ const main = async () => {
   await txn.wait();
   console.log("Minted NFT");
 
-  // txn = await nftContract.makeAnEpicNFT("Second Artist", "008080", 580, 580);
-  // await txn.wait();
-  // console.log("Minted NFT");
+  txn = await nftContract.makeAnEpicNFT("Second Artist", "008080", 580, 580);
+  await txn.wait();
+  console.log("Minted NFT");
 
-  // txn = await nftContract.makeAnEpicNFT("Third Artist", "b22222", 340, 340);
-  // await txn.wait();
-  // console.log("Minted NFT");
+  txn = await nftContract.makeAnEpicNFT("Third Artist", "b22222", 340, 340);
+  await txn.wait();
+  console.log("Minted NFT");
 
   // txn = await nftContract.updateNFT();
   // await txn.wait();

@@ -29,19 +29,6 @@ contract MyEpicNFT is ERC721URIStorage {
 
   event NewEpicNFTMinted(address sender, uint256 tokenId);
 
-  // function pickRandomFirstWord(uint256 tokenId) public view returns (string memory) {
-
-  //   uint256 rand = random(string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId))));
-	//   console.log("rand - seed: ", rand);
-  //   rand = rand % firstWords.length;
-	//   console.log("rand - first word: ", rand);
-  //   return firstWords[rand];
-  // }
-
-  // function random(string memory input) internal pure returns (uint256) {
-  //   return uint256(keccak256(abi.encodePacked(input)));
-  // }
-
   constructor() ERC721 ("RandomDotNFT", "RDN") {
     console.log("This is my RandomDotNFT contract.");
   }
