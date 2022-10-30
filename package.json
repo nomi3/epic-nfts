@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "npx hardhat run scripts/run.js",
+    "deploy-test": "npx hardhat run scripts/deploy.js --network goerli",
+    "update-test": "npx hardhat run scripts/update.js --network goerli"
   },
   "keywords": [],
   "author": "",
